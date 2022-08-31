@@ -6,6 +6,16 @@ from idlelib.tooltip import Hovertip
 
 import backend
 
+def view_command():
+    list.delete(0,END)
+    for row in backend.view():
+        list.insert(END, row)
+
+def search_command():
+    list.delete(0,END)
+    for row in backend.search(title_text.get(), author_text.get(), year_text.get(), publisher_text.get()):
+        list.insert(END, row)
+
 window = Tk()
 window.title("Book Information Store")
 window.iconphoto(False, PhotoImage(file='images/icon.png'))
@@ -48,7 +58,7 @@ publisher_entry = Entry(info_frame, textvariable=publisher_text)
 publisher_entry.grid(row=1, column=4, padx=5, pady=5)
 
 
-list = Listbox(window, height=10, width=35)
+list = Listbox(window, height=10, width=50, font=('Times', 20))
 list.place(x=10, y=130, height=560, width=1280)
 
 
@@ -56,12 +66,12 @@ tools_frame = LabelFrame(window, text="Tools", relief=RIDGE, bg='#a9c0e2', font=
 tools_frame.place(x=830, y=10, width=460, height=110)
 
 view_image = PhotoImage(file='images/view_all.png', height=50, width=50)
-view_btn = Button(tools_frame, image=view_image, bg='#a9c0e2', fg='black')
+view_btn = Button(tools_frame, image=view_image, bg='#a9c0e2', fg='black', command=view_command)
 view_btn_hover = Hovertip(view_btn, 'View All', hover_delay=10)
 view_btn.grid(row=0, column=0, padx=15, pady=5)
 
 search_image = PhotoImage(file='images/search.png', height=50, width=50)
-search_btn = Button(tools_frame, image=search_image, bg='#a9c0e2', fg='black')
+search_btn = Button(tools_frame, image=search_image, bg='#a9c0e2', fg='black', command=search_command)
 search_btn_hover = Hovertip(search_btn, 'Search Entry', hover_delay=10)
 search_btn.grid(row=0, column=1, pady=5)
 
