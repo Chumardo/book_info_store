@@ -4,6 +4,8 @@ import tkinter
 from PIL import ImageTk, Image
 from idlelib.tooltip import Hovertip
 
+import backend
+
 window = Tk()
 window.title("Book Information Store")
 window.iconphoto(False, PhotoImage(file='images/icon.png'))
