@@ -1,5 +1,6 @@
 from cgitb import text
 from tkinter import *
+from tkinter import messagebox
 import tkinter
 from PIL import ImageTk, Image
 from idlelib.tooltip import Hovertip
@@ -20,36 +21,15 @@ def get_selected_row(event):
     publisher_entry.insert(END, selected_tuple[4])
 
 def quit_msg():
-    qw=Tk()
-    frame1 = Frame(qw, highlightbackground="green", highlightcolor="green",highlightthickness=1, bd=0)
-    frame1.pack()
-    qw.overrideredirect(1)
-    qw.geometry("200x70+400+600")
-    lbl = Label(frame1, text="Are you sure you want to quit?")
-    lbl.pack()
-    yes_btn = Button(frame1, text="Yes", bg="light blue", fg="red",command=quit, width=10)
-    yes_btn.pack(padx=10, pady=10 , side=LEFT)
-    no_btn = Button(frame1, text="No", bg="light blue", fg="red",command=qw.destroy, width=10)
-    no_btn.pack(padx=10, pady=10, side=LEFT)
-    qw.mainloop()
+    result = messagebox.askquestion("Confirm", "Are you sure you want to quit?")
+    if result == "yes":
+        quit()
 
 
 def delete_msg():
-    qw=Tk()
-    frame1 = Frame(qw, highlightbackground="green", highlightcolor="green",highlightthickness=1, bd=0)
-    frame1.pack()
-    qw.overrideredirect(1)
-    qw.geometry("250x70+400+600")
-    lbl = Label(frame1, text="Are you sure you want to delete record?")
-    lbl.pack()
-    def delete_command():
+    result = messagebox.askquestion("Confirm","Are you sure you want to delete record?")
+    if result == "yes":
         backend.delete(selected_tuple[0])
-        qw.destroy()
-    yes_btn = Button(frame1, text="Yes", bg="light blue", fg="red",command=delete_command, width=10)
-    yes_btn.pack(padx=10, pady=10 , side=LEFT)
-    no_btn = Button(frame1, text="No", bg="light blue", fg="red",command=qw.destroy, width=10)
-    no_btn.pack(padx=10, pady=10, side=LEFT)
-    qw.mainloop()
 
 def view_command():
     list.delete(0,END)
@@ -73,14 +53,14 @@ def update_command():
 window = Tk()
 window.title("Book Information Store")
 window.iconphoto(False, PhotoImage(file='images/icon.png'))
-window.minsize(1300,700)
+window.minsize(590,580)
 window.configure(bg='lightblue')
 
 
-icon_image = Image.open("images/icon.png")
-book_photo = ImageTk.PhotoImage(icon_image)
+book_image = Image.open("images/icon.png")
+book_photo = ImageTk.PhotoImage(book_image)
 book_label = Label(image=book_photo, bg='lightblue')
-book_label.place(x=600, y=15)
+book_label.place(x=480, y=15)
 
 info_frame = LabelFrame(window, text="Book Information", relief=RIDGE, bg='#a9c0e2', font=('arial', 15, 'bold'), fg='black')
 info_frame.place(x=10, y=10, width=460, height=110)
@@ -112,13 +92,13 @@ publisher_entry = Entry(info_frame, textvariable=publisher_text)
 publisher_entry.grid(row=1, column=4, padx=5, pady=5)
 
 
-list = Listbox(window, height=10, width=50, font=('Times', 20))
-list.place(x=10, y=130, height=560, width=1280)
+list = Listbox(window, height=10, width=50, font=('Times', 14))
+list.place(x=10, y=130, height=440, width=460)
 
 list.bind('<<ListboxSelect>>',get_selected_row)
 
 tools_frame = LabelFrame(window, text="Tools", relief=RIDGE, bg='#a9c0e2', font=('arial', 15, 'bold'), fg='black')
-tools_frame.place(x=830, y=10, width=460, height=110)
+tools_frame.place(x=490, y=130, width=90, height=440)
 
 view_image = PhotoImage(file='images/view_all.png', height=50, width=50)
 view_btn = Button(tools_frame, image=view_image, bg='#a9c0e2', fg='black', command=view_command)
@@ -128,26 +108,26 @@ view_btn.grid(row=0, column=0, padx=15, pady=5)
 search_image = PhotoImage(file='images/search.png', height=50, width=50)
 search_btn = Button(tools_frame, image=search_image, bg='#a9c0e2', fg='black', command=search_command)
 search_btn_hover = Hovertip(search_btn, 'Search Entry', hover_delay=10)
-search_btn.grid(row=0, column=1, pady=5)
+search_btn.grid(row=1, column=0, pady=5)
 
 add_image = PhotoImage(file='images/add.png', height=50, width=50)
 add_btn = Button(tools_frame, image=add_image, bg='#a9c0e2', fg='black', command=add_command)
 add_btn_hover = Hovertip(add_btn, 'Add Entry', hover_delay=10)
-add_btn.grid(row=0, column=2, padx=10, pady=5)
+add_btn.grid(row=2, column=0, padx=10, pady=5)
 
 update_image = PhotoImage(file='images/update.png', height=50, width=50)
 update_btn = Button(tools_frame, image=update_image, bg='#a9c0e2', fg='black', command=update_command)
 update_btn_hover = Hovertip(update_btn, 'Update', hover_delay=10)
-update_btn.grid(row=0, column=3, padx=10, pady=5)
+update_btn.grid(row=3, column=0, padx=10, pady=5)
 
 delete_image = PhotoImage(file='images/delete.png', height=50, width=50)
 delete_btn = Button(tools_frame, image=delete_image, bg='#a9c0e2', fg='black', command=delete_msg)
 delete_btn_hover = Hovertip(delete_btn, 'Delete', hover_delay=10)
-delete_btn.grid(row=0, column=4, padx=10, pady=5)
+delete_btn.grid(row=4, column=0, padx=10, pady=5)
 
 close_image = PhotoImage(file='images/close.png', height=50, width=50)
 close_btn = Button(tools_frame, image=close_image, bg='#a9c0e2', fg='black', command=quit_msg)
 close_btn_hover = Hovertip(close_btn, 'Close', hover_delay=10)
-close_btn.grid(row=0, column=5, padx=10, pady=5)
+close_btn.grid(row=5, column=0, padx=10, pady=5)
 
 window.mainloop()
